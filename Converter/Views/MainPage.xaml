@@ -3,43 +3,73 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
              x:Class="Converter.MainPage">
+    <ScrollView>
+        <Grid Padding="20" ColumnSpacing="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-    <VerticalStackLayout Padding="20" Spacing="15" VerticalOptions="Center" HorizontalOptions="Center">
+            <VerticalStackLayout Grid.Column="0" Spacing="15" VerticalOptions="Center" HorizontalOptions="Center">
+                <Label Text="Конвертатор валют" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"/>
 
-    <Label Text="Конвертатор валют" 
-           FontSize="24" 
-           FontAttributes="Bold" 
-           HorizontalOptions="Center"/>
+                <Entry Placeholder="Amount" 
+                   Text="{Binding Amount}" 
+                   Keyboard="Numeric"
+                   HorizontalOptions="FillAndExpand"
+                   WidthRequest="200"/>
 
-    <Entry Placeholder="Amount" 
-           Text="{Binding Amount}" 
-           Keyboard="Numeric"
-           HorizontalOptions="Fill" 
-           WidthRequest="200"/>
+                <Picker Title="Валюта з якої конвертирувати:" 
+                    ItemsSource="{Binding CurrencyCodes}" 
+                    SelectedItem="{Binding FromCurrency}" 
+                    HorizontalOptions="FillAndExpand"
+                    WidthRequest="200"/>
 
-    <Picker Title="Валюта з якої конвертирувати:" 
-            ItemsSource="{Binding CurrencyCodes}" 
-            SelectedItem="{Binding FromCurrency}" 
-            HorizontalOptions="Fill" 
-            WidthRequest="200"/>
-    
-    <Picker Title="Валюта в яку конвертирувати:" 
-            ItemsSource="{Binding CurrencyCodes}" 
-            SelectedItem="{Binding ToCurrency}" 
-            HorizontalOptions="Fill" 
-            WidthRequest="200"/>
+                <Picker Title="Валюта в яку конвертирувати:" 
+                    ItemsSource="{Binding CurrencyCodes}" 
+                    SelectedItem="{Binding ToCurrency}" 
+                    HorizontalOptions="FillAndExpand"
+                    WidthRequest="200"/>
 
-    <Button Text="Convert" 
-            Command="{Binding ConvertCommand}" 
-            HorizontalOptions="Center"
-            WidthRequest="150"
-            HeightRequest="45"/>
+                <Button Text="Convert" 
+                    Command="{Binding ConvertCommand}" 
+                    HorizontalOptions="Center"
+                    WidthRequest="150"
+                    HeightRequest="45"/>
 
-    <Label Text="{Binding ConvertedAmount, StringFormat='Converted: {0:F2}'}" 
-           FontSize="20" 
-           HorizontalOptions="Center"/>
+                <Label Text="{Binding ConvertedAmount, StringFormat='Converted: {0:F2}'}" 
+                   FontSize="20" 
+                   HorizontalOptions="Center"/>
+            </VerticalStackLayout>
 
-</VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="1" Spacing="15" VerticalOptions="Center" HorizontalOptions="Center" >
+                <Label Text="Курс USD до UAH на вибрану дату" FontSize="24" />
+                <Label Text="" FontSize="18"/>
+                <Label Text="Виберіть дату" FontSize="18"/>
+                <DatePicker Date="{Binding SelectedDate, Mode=TwoWay}" />
+
+                <Button Text="Завантажити" 
+                    Command="{Binding LoadCurrenciesByDateCommand}" 
+                    HorizontalOptions="Center"
+                    WidthRequest="150"/>
+
+                <ListView ItemsSource="{Binding CurrenciesForDate}" Margin="0" SeparatorVisibility="Default">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextCell Text="{Binding Name}" 
+                                  Detail="{Binding Rate, StringFormat='Rate: {0:F2}'}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </VerticalStackLayout>
+
+        </Grid>
+    </ScrollView>
+
+
 
 
 </ContentPage>
